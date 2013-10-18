@@ -1,3 +1,4 @@
+require "spec_helper"
 require 'colour_obj'
 
 describe ColourObj::Colour do

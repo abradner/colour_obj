@@ -2,8 +2,10 @@ module ColourObj
 
   class Colour
 
+    COLOUR_MIN = 0
+    COLOUR_MAX = 255
 
-    attr_accessor :red, :green, :blue
+    attr_reader :red, :green, :blue
 
 
     def initialize (colour = nil)
@@ -12,9 +14,41 @@ module ColourObj
       set_colour colour
     end
 
+
+    #SETTERS
     def set_colour (colour)
       return if colour.nil?
       parse! colour
+    end
+
+    def colour= (colour)
+      set_colour(colour)
+    end
+
+    def red=(val)
+      @red = bound(val)
+    end
+
+    def green=(val)
+      @green = bound(val)
+    end
+
+    def blue=(val)
+      @blue = bound(val)
+    end
+
+    def shift(hash)
+      unless hash[:all].nil?
+        hash[:red] = hash[:red].nil? ? hash[:all] : hash[:red] + hash[:all]
+        hash[:green] = hash[:green].nil? ? hash[:all] : hash[:green] + hash[:all]
+        hash[:blue] = hash[:blue].nil? ? hash[:all] : hash[:blue] + hash[:all]
+      end
+
+
+      _shift_red hash[:red] unless hash[:red].nil?
+      _shift_green hash[:green] unless hash[:green].nil?
+      _shift_blue hash[:blue] unless hash[:blue].nil?
+
 
     end
 
@@ -28,11 +62,31 @@ module ColourObj
       to_hex
     end
 
+    def to_a
+      to_rgb
+    end
+
     def to_hex
       res = el_to_hex(@red) << el_to_hex(@green) << el_to_hex(@blue)
     end
 
     private
+
+    def _shift_red(val)
+      self.red= red + val
+    end
+
+    def _shift_green(val)
+      self.green= green + val
+    end
+
+    def _shift_blue(val)
+      self.blue= blue + val
+    end
+
+    def bound(val)
+      [[val, COLOUR_MIN].max, COLOUR_MAX].min
+    end
 
     def parse!(param)
 
@@ -52,18 +106,20 @@ module ColourObj
     end
 
     def clean_hex(unclean_str)
-      clean_str = unclean_str.upcase.gsub(/[^A-Za-z0-9]/,'')
+      clean_str = unclean_str.downcase.gsub(/[^A-Za-z0-9]/, '')
     end
 
 # Takes in a string of form RRGGBB where each character is 0..F
     def set_hex(clean_hex_str)
-      @red   = clean_hex_str[0, 2].to_i(16)
+      @red = clean_hex_str[0, 2].to_i(16)
       @green = clean_hex_str[2, 2].to_i(16)
-      @blue  = clean_hex_str[4, 2].to_i(16)
+      @blue = clean_hex_str[4, 2].to_i(16)
     end
 
     def set_rgb(arr)
-      @red, @green, @blue = arr
+      @red, @green, @blue = arr.map do |el|
+        bound(el)
+      end
     end
 
     def el_to_hex(el)

@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = ColourObj::VERSION
   spec.authors       = ["Alex Bradner"]
   spec.email         = ["alex@bradner.net"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.description   = "RGB int and hex colour library"
+  spec.summary       = "Handles parsing and manipulation of 24bpp RGB colour values"
+  spec.homepage      = "http://github.com/abradner/colour_obj"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
@@ -25,5 +25,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "simplecov"
   spec.add_development_dependency "simplecov-rcov"
   spec.add_development_dependency "json"
+  spec.add_development_dependency "rake"
 
 end

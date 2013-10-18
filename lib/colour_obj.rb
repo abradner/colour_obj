@@ -1,5 +1,6 @@
 require "colour_obj/version"
+require "colour"
 
 module ColourObj
-  # Your code goes here...
+
 end
